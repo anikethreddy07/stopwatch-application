@@ -1,0 +1,63 @@
+let minutes = 0;
+let seconds = 0;
+let milliseconds = 0;
+let interval;
+let isRunning = false;
+
+const startStopBtn = document.getElementById('startStopBtn');
+const resetBtn = document.getElementById('resetBtn');
+const displayMinutes = document.getElementById('minutes');
+const displaySeconds = document.getElementById('seconds');
+const displayMilliseconds = document.getElementById('milliseconds');
+
+startStopBtn.addEventListener('click', () => {
+    if (isRunning) {
+        stopTimer();
+    } else {
+        startTimer();
+    }
+});
+
+resetBtn.addEventListener('click', resetTimer);
+
+function startTimer() {
+    isRunning = true;
+    startStopBtn.textContent = 'Stop';
+    interval = setInterval(() => {
+        milliseconds += 10;
+
+        if (milliseconds === 1000) {
+            milliseconds = 0;
+            seconds++;
+        }
+
+        if (seconds === 60) {
+            seconds = 0;
+            minutes++;
+        }
+
+        displayMilliseconds.textContent = formatTime(milliseconds / 10);
+        displaySeconds.textContent = formatTime(seconds);
+        displayMinutes.textContent = formatTime(minutes);
+    }, 10);
+}
+
+function stopTimer() {
+    isRunning = false;
+    startStopBtn.textContent = 'Start';
+    clearInterval(interval);
+}
+
+function resetTimer() {
+    stopTimer();
+    minutes = 0;
+    seconds = 0;
+    milliseconds = 0;
+    displayMinutes.textContent = '00';
+    displaySeconds.textContent = '00';
+    displayMilliseconds.textContent = '00';
+}
+
+function formatTime(time) {
+    return time < 10 ? 0${time} : time;
+}
